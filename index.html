@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sanju — Writer</title>
+<link rel="icon" href="image/writer-logo.png" type="image/png">
+<meta name="description" content="Sanju — engineer by training, writer by compulsion. Thrillers, psychological drama, stage plays.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,500;1,8..60,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: #100C15;
+    --glass: rgba(255,255,255,0.055);
+    --glass-strong: rgba(255,255,255,0.09);
+    --border: rgba(255,255,255,0.14);
+    --border-soft: rgba(255,255,255,0.08);
+    --text: #EEEAF2;
+    --text-dim: #ADA3BC;
+    --text-faint: #756B87;
+    --cyan: #A99BD9;
+    --amber: #C23B62;
+    --max: 780px;
+  }
+
+  *{ box-sizing: border-box; }
+  html{ scroll-behavior: smooth; }
+
+  body{
+    margin:0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Source Serif 4', serif;
+    -webkit-font-smoothing: antialiased;
+    position: relative;
+    overflow-x: hidden;
+  }
+
+  .orb{
+    position: fixed;
+    border-radius: 50%;
+    filter: blur(90px);
+    opacity: 0.35;
+    z-index: 0;
+    pointer-events: none;
+  }
+  .orb-cyan{ width: 480px; height: 480px; background: radial-gradient(circle, var(--cyan), transparent 70%); top: -160px; left: -140px; }
+  .orb-amber{ width: 420px; height: 420px; background: radial-gradient(circle, var(--amber), transparent 70%); bottom: -120px; right: -120px; opacity: 0.28; }
+  .orb-cyan2{ width: 320px; height: 320px; background: radial-gradient(circle, var(--cyan), transparent 70%); top: 55%; right: 8%; opacity: 0.16; }
+
+  ::selection{ background: var(--cyan); color: #06181c; }
+  a{ color: var(--cyan); }
+
+  .wrap{ max-width: var(--max); margin: 0 auto; padding: 0 24px; position: relative; z-index: 1; }
+
+  .nav-outer{ position: sticky; top: 18px; z-index: 50; display: flex; justify-content: center; padding: 0 20px; }
+  .nav-pill{
+    display: flex; gap: 2px;
+    background: rgba(15,19,25,0.55);
+    backdrop-filter: blur(18px) saturate(140%);
+    -webkit-backdrop-filter: blur(18px) saturate(140%);
+    border: 1px solid var(--border);
+    border-radius: 999px; padding: 6px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.35);
+    max-width: 100%; overflow-x: auto;
+  }
+  .nav-pill a{
+    font-family: 'JetBrains Mono', monospace; font-size: 12px; letter-spacing: 0.02em;
+    text-decoration: none; color: var(--text-dim);
+    padding: 9px 16px; border-radius: 999px; white-space: nowrap;
+    transition: color .2s ease, background .2s ease;
+  }
+  .nav-pill a:hover{ color: var(--text); background: var(--glass); }
+  .nav-pill a.brand{
+    color: var(--bg);
+    background: linear-gradient(120deg, var(--cyan), var(--amber));
+    font-weight: 500;
+  }
+
+  .hero{ padding: 100px 0 64px; }
+  .file-meta{
+    font-family: 'JetBrains Mono', monospace; font-size: 12px; color: var(--text-faint);
+    letter-spacing: 0.05em; margin: 0 0 22px; display: flex; align-items: center; gap: 10px;
+  }
+  .file-meta .dot{ width: 6px; height: 6px; border-radius: 50%; background: var(--cyan); box-shadow: 0 0 8px var(--cyan); }
+  .hero h1{
+    font-family: 'Space Grotesk', sans-serif; font-weight: 600;
+    font-size: clamp(42px, 8vw, 64px); line-height: 1.05; margin: 0 0 10px; letter-spacing: -0.02em;
+    background: linear-gradient(120deg, #fff 30%, var(--cyan) 75%, var(--amber) 100%);
+    -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+  }
+  .hero .role{ font-family: 'JetBrains Mono', monospace; letter-spacing: 0.03em; font-size: 13.5px; color: var(--text-dim); margin: 0 0 30px; }
+  .hero .role .sep{ color: var(--text-faint); margin: 0 8px; }
+  .hero p.lede{ font-size: 20px; line-height: 1.65; color: var(--text-dim); max-width: 56ch; margin: 0; font-weight: 400; }
+  .hero p.lede em{ font-style: italic; color: var(--text); }
+
+  hr.tear{ border: none; border-top: 1px solid var(--border-soft); margin: 0; }
+
+  section{ padding: 60px 0; }
+  .eyebrow{ font-family: 'JetBrains Mono', monospace; text-transform: uppercase; letter-spacing: 0.14em; font-size: 11.5px; font-weight: 500; color: var(--cyan); margin: 0 0 12px; }
+  h2{ font-family: 'Space Grotesk', sans-serif; font-weight: 600; font-size: 28px; margin: 0 0 26px; color: var(--text); }
+
+  .panel{
+    background: var(--glass);
+    backdrop-filter: blur(16px) saturate(130%);
+    -webkit-backdrop-filter: blur(16px) saturate(130%);
+    border: 1px solid var(--border-soft);
+    border-radius: 18px;
+    box-shadow: 0 4px 30px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.05);
+  }
+
+  .manuscript{ padding: 34px clamp(22px, 4vw, 44px); font-size: 17px; line-height: 1.85; color: var(--text-dim); }
+  .manuscript p{ margin: 0 0 18px; }
+  .manuscript p:last-child{ margin-bottom: 0; }
+  .manuscript .cap{ color: var(--text); font-style: italic; }
+
+  .exhibit{ margin-bottom: 20px; overflow: hidden; }
+  .exhibit:last-child{ margin-bottom: 0; }
+  .exhibit-head{ display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; padding: 22px clamp(20px, 4vw, 28px); cursor: pointer; list-style: none; }
+  .exhibit-head::-webkit-details-marker{ display:none; }
+  .exhibit-head .title-block .tag{ font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--text-faint); display: block; margin-bottom: 8px; letter-spacing: 0.03em; }
+  .exhibit-head .title-block h3{ font-family: 'Space Grotesk', sans-serif; font-weight: 600; font-size: 21px; margin: 0 0 8px; color: var(--text); }
+  .exhibit-head .title-block .desc{ font-size: 14.5px; color: var(--text-dim); margin: 0; max-width: 48ch; line-height: 1.55; font-family: 'Source Serif 4', serif; }
+  .status{ font-family: 'JetBrains Mono', monospace; font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.07em; font-weight: 500; color: var(--cyan); border: 1px solid rgba(169,155,217,0.35); background: rgba(169,155,217,0.08); padding: 5px 11px; border-radius: 999px; white-space: nowrap; flex-shrink: 0; margin-top: 4px; }
+  .status.amber{ color: var(--amber); border-color: rgba(194,59,98,0.35); background: rgba(194,59,98,0.08); }
+  .toggle-icon{ font-family: 'JetBrains Mono', monospace; font-size: 18px; color: var(--text-dim); flex-shrink: 0; width: 20px; text-align:center; transition: transform .25s ease; }
+  details[open] .toggle-icon{ transform: rotate(45deg); color: var(--cyan); }
+
+  .exhibit-body{ border-top: 1px solid var(--border-soft); padding: 26px clamp(18px, 4vw, 30px) 30px; }
+  .script{ font-family: 'JetBrains Mono', monospace; font-size: 13px; line-height: 1.85; color: var(--text-dim); white-space: pre-wrap; max-height: 480px; overflow-y: auto; padding-right: 10px; }
+  .script::-webkit-scrollbar{ width: 8px; }
+  .script::-webkit-scrollbar-track{ background: transparent; }
+  .script::-webkit-scrollbar-thumb{ background: var(--border); border-radius: 4px; }
+
+  .contact-row{ display: flex; flex-wrap: wrap; gap: 12px; }
+  .contact-row a{
+    font-family: 'JetBrains Mono', monospace; font-size: 13.5px; text-decoration: none; color: var(--text);
+    background: var(--glass); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+    border: 1px solid var(--border); padding: 12px 20px; border-radius: 999px;
+    transition: background .2s ease, border-color .2s ease, transform .2s ease;
+  }
+  .contact-row a:hover{ background: var(--glass-strong); border-color: var(--cyan); transform: translateY(-1px); }
+
+  footer{ padding: 40px 0 70px; text-align: center; }
+  .end-stamp{ display: inline-block; font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.12em; color: var(--text-faint); }
+
+  @media (max-width: 640px){ .orb{ opacity: 0.22; } }
+  @media (prefers-reduced-motion: reduce){ html{ scroll-behavior:auto; } *{ transition:none !important; } }
+</style>
+</head>
+<body>
+
+<div class="orb orb-cyan"></div>
+<div class="orb orb-amber"></div>
+<div class="orb orb-cyan2"></div>
+
+<div class="nav-outer">
+  <nav class="nav-pill">
+    <a href="#top" class="brand">Sanju</a>
+    <a href="#bio">Bio</a>
+    <a href="#work">Scripts</a>
+    <a href="#contact">Contact</a>
+  </nav>
+</div>
+
+<div class="wrap">
+
+  <header class="hero" id="top">
+    <p class="file-meta"><span class="dot"></span>AVAILABLE FOR STORIES WRITING</p>
+    <h1>Sanju.</h1>
+    <p class="role">ENGINEER<span class="sep">/</span>WRITER<span class="sep">/</span>THRILLER &amp; PSYCHOLOGICAL DRAMA</p>
+    <p class="lede">I write stories that turn the audience into a <em>suspect in their own theory</em> — you're handed evidence, you build a confident conclusion, and the story proves you wrong in an interesting way.</p>
+  </header>
+
+  <hr class="tear">
+
+  <section id="bio">
+    <p class="eyebrow">Statement</p>
+    <h2>What kind of stories do I want to tell?</h2>
+    <div class="panel manuscript">
+      <p>I want to write stories that turn the audience into a suspect in their own theory.</p>
+      <p>I am an engineer by training and a writer by compulsion — the second one started first. In the ninth grade I began writing songs and poetry because I didn't have another language for the things I was noticing; by college, that same instinct was winning poetry competitions I never expected to place in. Somewhere along the way, the two halves of me stopped competing. I write technical documentation and GitHub READMEs for a living now, and I've realized debugging and storytelling ask the same question: <span class="cap">what is actually happening here, versus what does it look like is happening?</span></p>
+      <p>That question is the genre I want to write in. I'm drawn to thrillers and psychological stories — not the kind that show you a mystery, but the kind that hand you evidence and let you build the wrong conclusion yourself, confidently, right up until the story proves you were reading it wrong the whole time. I want the audience leaning forward, quietly building their own theory of the crime, the character, the ending — and I want to be the writer who lets them get just close enough to be wrong in an interesting way.</p>
+      <p>Engineering taught me that the most elegant systems are the ones where the failure point was hiding in plain sight the entire time. I want my stories to work exactly like that.</p>
+    </div>
+  </section>
+
+  <section id="work">
+    <p class="eyebrow">Writing Samples</p>
+    <h2>Two stage plays, one inheritance</h2>
+
+    <details class="exhibit panel" open>
+      <summary class="exhibit-head">
+        <div class="title-block">
+          <span class="tag">STAGE PLAY — SOLO</span>
+          <h3>"Case?"</h3>
+          <p class="desc">A child watches a school video on the Constitution and falls in love with the idea of justice — the same year her own family learns exactly what "justice" costs to wait for.</p>
+        </div>
+        <span class="status">Read</span>
+        <span class="toggle-icon">+</span>
+      </summary>
+      <div class="exhibit-body">
+        <div class="script">CASE?
+A short play
+
+CHARACTERS
+MEERA — a girl, 12 (later 16)
+MA — her mother
+BAAPU — her father (glimpsed, not heavily used)
+UNCLE'S VOICE — heard, not seen
+TEACHER — brief, functional
+CLASSMATE — one line
+
+---
+
+SCENE ONE
+
+INT. CLASSROOM — DAY
+
+A government-school classroom. Chalk dust in the light. A projector throws a shaky educational video onto a whitewashed wall — the tricolour, the Constitution's preamble scrolling in Hindi and English.
+
+MEERA (12) sits alone on the last bench, knees pulled up slightly, completely still. Everyone else fidgets, whispers, half-watches. Meera doesn't blink.
+
+On screen (we hear, faint, tinny speaker audio):
+
+VIDEO NARRATOR (V.O.)
+(distorted, small speaker)
+...every citizen, rich or poor, is equal before the law...
+
+Meera mouths the word "equal" to herself, testing it.
+
+The video ends. Lights come up. Chairs scrape. Meera stays very still a moment longer, holding onto something.
+
+A small smile arrives on her face — private, not performed for anyone.
+
+CLASSMATE (O.S.)
+Oye Meera. What are you smiling at?
+
+Meera looks up. Doesn't answer right away. The smile doesn't leave — she just tucks it inward.
+
+MEERA
+Nothing.
+
+She looks back at the blank wall where the video was, like she can still see it there.
+
+CUT TO:
+
+---
+
+SCENE TWO
+
+INT. MEERA'S HOUSE — COURTYARD — DAY
+
+A modest home. Meera, school bag still on her back, stops at the gate.
+
+In the courtyard: four or five MEN, loud, standing too close to BAAPU. Papers in someone's hand, waved like a weapon. Baapu's voice, tight, trying to stay calm and failing.
+
+We don't need the words. Meera's face tells us enough — she's seen something she wasn't supposed to walk in on.
+
+She backs away from the gate. Runs.
+
+CUT TO:
+
+---
+
+INT. HOUSE — KITCHEN — CONTINUOUS
+
+Meera bursts in, finds MA at the stove. Doesn't say anything — just wraps herself around her mother's waist, crying without quite knowing why.
+
+Ma's hand goes to her hair automatically, still stirring with the other. Practiced. This isn't the first time she's done this exact motion.
+
+MEERA
+(muffled, into her sari)
+Who are they. Why are they shouting at Baapu.
+
+MA
+(too fast, too light)
+Nothing, beta. Grown-up talk. You go, do your homework.
+
+MEERA
+I want to know.
+
+MA
+(firmer now, not unkind)
+Meera. Homework.
+
+Meera pulls back. Looks at her mother's face — really looks — the way children do when they're deciding whether to believe an adult.
+
+She doesn't believe her. But she goes.
+
+CUT TO:
+
+---
+
+SCENE THREE
+
+INT. MEERA'S HOUSE — NIGHT
+
+Late. The house is dark except one bulb in the kitchen. Meera lies in bed, eyes open, listening.
+
+Her parents' voices, low, from the next room — not fighting exactly, just worn thin.
+
+MA (O.S.)
+...he's your own brother, how can he...
+
+BAAPU (O.S.)
+(exhausted, quiet)
+Doesn't matter whose brother. He's filed it. Dadaji's land, in his name now. And this — this case on top of it, so I'm too busy defending myself to even ask for what's mine.
+
+Meera sits up. Slides out of bed. Moves to the doorway — not fully through it, just enough to hear better, half in shadow.
+
+MA (O.S.) (CONT'D)
+So what do we do.
+
+BAAPU (O.S.)
+(long pause)
+What everyone does. We wait for a date. Then another date. Then another.
+
+Meera stands in the dark hallway a long moment. Doesn't cry this time. Just stands there, doing arithmetic no twelve-year-old should have to do.
+
+She thinks of her father — young, arriving from the village with one bag, working two jobs to build this small house, this small kitchen, this small life. And now his own blood standing in the courtyard with papers, taking pieces of it away.
+
+She goes back to bed. Doesn't sleep. Stares at the ceiling fan turning, slow, indifferent.
+
+CUT TO:
+
+---
+
+SCENE FOUR
+
+INT. HOUSE — VERANDA — MORNING
+
+Meera, unslept, dark under her eyes, sits on the front step. Ma hands her the folded newspaper without a word — a small daily ritual, ordinary, oblivious to what's inside her.
+
+Meera unfolds it without much hope.
+
+A headline, large, on the front page:
+
+"SUPREME COURT DELIVERS JUSTICE IN LAND DISPUTE CASE"
+
+Meera stares at it a long moment. Something in her face changes — not fully relieved, but reaching for relief, wanting badly to be allowed to believe it again.
+
+MEERA
+(quiet, to herself)
+We have a system.
+
+The smile returns — smaller than the one in the classroom, a little more effortful, but real. She folds the paper back along its crease, sets it down carefully, like something that might break.
+
+She carries the smile through the rest of the day — we see it in glimpses, at school, at dinner, unconvincing to no one but herself, and she doesn't notice, or doesn't want to.
+
+CUT TO:
+
+---
+
+SCENE FIVE
+
+INT. HOUSE — KITCHEN — DAY (FOUR YEARS LATER)
+
+MEERA, now 16, taller, quieter around the eyes, dries a plate at the counter. Ma cooks nearby — the same stove, the same practiced hands, older now.
+
+MEERA
+(casual, almost an afterthought)
+Ma. Whatever happened with the case. Dadaji's land. Uncle.
+
+Ma doesn't look up right away. Her hands keep moving — chopping, stirring, the rhythm of a woman who has done this a thousand times.
+
+MA
+(a small, tired laugh, not quite a laugh)
+Case?
+
+She glances at Meera — a look that says everything the last four years didn't.
+
+MA (CONT'D)
+(back to the stove, quiet)
+There was never a "case," beta. Only dates.
+
+Meera stands very still, plate in hand, drying cloth stopped mid-motion.
+
+She doesn't say anything. She doesn't need to. We can see the twelve-year-old on the last bench somewhere behind her eyes, and the newspaper headline, and the smile she carried around for four years like proof of something.
+
+Ma keeps cooking. The kitchen sounds — oil, knife, flame — continue, ordinary, unbothered.
+
+Meera goes back to drying the plate. Slower now.
+
+LIGHTS FADE.
+
+END OF PLAY.</div>
+      </div>
+    </details>
+
+    <details class="exhibit panel">
+      <summary class="exhibit-head">
+        <div class="title-block">
+          <span class="tag">STAGE PLAY — COMPANION PIECE</span>
+          <h3>"Inheritance"</h3>
+          <p class="desc">Years later, the girl from "Case?" has become a lawyer who teaches her clients to outlast the system rather than trust it — until a child in a courthouse corridor asks her the exact question she once believed.</p>
+        </div>
+        <span class="status amber">Read</span>
+        <span class="toggle-icon">+</span>
+      </summary>
+      <div class="exhibit-body">
+        <div class="script">INHERITANCE
+A short play
+
+CHARACTERS
+MEERA — a lawyer, early 30s, composed, precise
+CLIENT — a man, 40s, worn down more than his suit lets on
+GIRL — 10, the client's daughter, waiting outside
+MEERA (12) — glimpsed in memory only
+MEERA (22) — glimpsed in memory only, law student
+MA (V.O.) — glimpsed in memory only
+
+A NOTE ON STAGING: The memory fragments should not be treated as flashback in the conventional sense — no soft lighting, no dissolve. They should intrude, sudden and unresolved, like something surfacing against Meera's will and being pushed back down.
+
+---
+
+SCENE ONE
+
+INT. COURT CORRIDOR — DAY
+
+Marble floors, the particular fluorescent hum of a government building. Peons carry files bound in red cloth string.
+
+MEERA (30s) stands with a CLIENT — a man in a suit that was tailored for a version of him with more money and less exhaustion in his face. He is sweating more than the AC accounts for.
+
+CLIENT
+They'll ask for the original registry papers. I don't — Meera, I don't have all of them.
+
+MEERA
+(not looking up from her file)
+You don't need all of them today. You need a reason the hearing shouldn't happen today.
+
+CLIENT
+And if the judge asks why—
+
+MEERA
+The judge won't ask why. He has forty other cases before lunch. Give him an easy reason to move on, and he will move on.
+
+The client doesn't move. Something in him is still trying to hold onto the shape of a different conversation.
+
+CLIENT
+(quiet)
+My father died waiting for the first hearing. Two adjournments in, and he was gone. Never saw a single argument made in that courtroom.
+
+A beat. Meera finally looks up — not unmoved, exactly, but not letting it land anywhere useful either.
+
+MEERA
+(flat, not cruel, worse than cruel — practiced)
+Then don't waste today grieving him in a corridor. We need the certified copy by three, or this adjournment doesn't hold either.
+
+The client absorbs that. Nods, because there's nothing else to do with it.
+
+MEMORY (V.O.)
+(a younger woman's voice — MEERA, 22, law student, earnest, almost aggressive with conviction)
+I'm doing this so nobody does to another family what they did to mine. That's not — that's not a sentence I'm going to grow out of.
+
+Meera's hand goes still on the file for exactly one second. Then continues, exactly as before, like the second didn't happen.
+
+CLIENT
+My daughter's outside. She keeps asking me when we'll win.
+
+Meera glances toward the corridor — toward a bench we can't yet see.
+
+MEERA
+(quiet, precise, the most honest thing she's said)
+Don't teach her the word "win," Mr. Chaddha. Teach her the next date. Win is a promise. A date is just a fact. Facts are the only thing this building actually delivers on time.
+
+She closes the file. Walks toward the corridor. He watches her go, not sure if he's just been given wisdom or something closer to a diagnosis.
+
+CUT TO:
+
+---
+
+SCENE TWO
+
+INT. COURT CORRIDOR — BENCH — CONTINUOUS
+
+A wooden bench along the wall. A GIRL (10), the client's daughter, sits swinging her legs, a school civics textbook open on her lap — untouched, more prop than reading. She's clearly been told to wait quietly.
+
+Meera walks past, slows. Stops.
+
+MEERA
+(gently, professional-kind)
+Whose is this.
+
+She nods at the textbook.
+
+GIRL
+Mine. We had a test on it. The Constitution.
+
+MEERA
+(a beat)
+Did you like the chapter?
+
+GIRL
+(brightening, uncomplicated)
+Yes! It says everyone is equal. Rich, poor — everyone gets the same justice. My teacher said that's what makes India great.
+
+MEMORY (VISUAL — no dialogue): a flash, half a second — MEERA (12) on a school bench, same posture, same private smile, gone before it can be looked at directly.
+
+Meera doesn't answer right away. She looks at the girl a moment too long.
+
+GIRL (CONT'D)
+(innocent, testing)
+It's true, right? Everyone gets justice?
+
+A long pause. In the pause: a father's voice waiting for dates that were never a case. A newspaper folded like something that might break. A law student who meant every word she said, once, in a room Meera hasn't let herself remember in years.
+
+MEERA
+(quiet)
+Finish your chapter. Your father will be a little while yet.
+
+She starts to walk away.
+
+GIRL
+(calling after her, still hopeful)
+So it is true?
+
+Meera stops. Doesn't turn around fully — just enough that we see the side of her face.
+
+Something almost like a smile crosses it. Not performed. Not consciously offered. Just there, the way an old scar shows up in certain light — there before she's decided whether to let it be.
+
+MEERA
+(finally)
+Ask me again in twenty years.
+
+She walks on, back straight, files under her arm, heels loud on marble.
+
+The girl watches her go, smiles back — not understanding, taking it as a yes.
+
+She goes back to her textbook.
+
+Meera doesn't look back.
+
+LIGHTS FADE.
+
+END OF PLAY.</div>
+      </div>
+    </details>
+  </section>
+
+  <section id="contact">
+    <p class="eyebrow">Reach Me</p>
+    <h2>Get in touch</h2>
+    <div class="contact-row">
+      <a href="mailto:youremail@example.com">anu34300@gmail.com</a>
+      <a href="https://github.com/sanju-0" target="_blank" rel="noopener">GitHub ↗</a>
+    </div>
+  </section>
+
+  <footer>
+    <span class="end-stamp">— thanks for reading —</span>
+  </footer>
+
+</div>
+
+</body>
+</html>
